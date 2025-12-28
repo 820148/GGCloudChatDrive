@@ -12,17 +12,27 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background: #fff; }
-        iframe { border: none; width: 100vw; height: 100vh; display: none; }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #fff; }
+        /* Iframe bao phủ toàn bộ màn hình */
+        #appFrame { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            border: none; display: none; z-index: 50; 
+        }
+        #landing { 
+            position: relative; z-index: 100; height: 100%; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            text-align: center; background: white; padding: 24px;
+        }
     </style>
 </head>
 <body>
-    <div id="landing" class="flex flex-col items-center justify-center h-full p-6 text-center">
+
+    <div id="landing">
         <div class="mb-6 bg-blue-50 p-8 rounded-full shadow-inner">
             <i class="fas fa-cloud-meatball text-blue-500 text-6xl"></i>
         </div>
         <h1 class="text-3xl font-bold text-gray-800 mb-2 italic">Cloud Chat Drive</h1>
-        <p class="text-gray-500 mb-10 max-w-xs">Kết nối và lưu trữ dữ liệu an toàn trên không gian Drive của bạn.</p>
+        <p class="text-gray-500 mb-10 max-w-xs leading-relaxed">Kết nối và lưu trữ dữ liệu cá nhân an toàn trên không gian Drive của bạn.</p>
         
         <button id="connectBtn" class="flex items-center gap-4 bg-white border-2 border-gray-100 px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition-all font-bold text-gray-700 mb-10">
             <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-7 h-7"> Kết nối tài khoản Google
@@ -31,29 +41,46 @@
         <div class="border-t pt-6 w-full max-w-xs">
             <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 text-sm">
                 <p class="font-bold text-gray-700">Tác giả: Trần Gia Nhật Hoàng</p>
-                <p class="text-blue-600">SĐT: 0964 889 066</p>
+                <a href="tel:0964889066" class="text-blue-600 font-medium italic">SĐT: 0964 889 066</a>
             </div>
         </div>
     </div>
 
-    <iframe id="appFrame" src="" allow="geolocation; microphone; camera"></iframe>
+    <iframe id="appFrame" name="appFrame" allow="geolocation; microphone; camera; midi; encrypted-media; clipboard-write;" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-scripts allow-same-origin"></iframe>
 
     <script>
-        // Link GAS đã mã hóa Base64
+        // DÁN LINK GAS ĐÃ MÃ HÓA BASE64 VÀO ĐÂY
         const _0x_secret = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J6YnJKbENqdktWYUNxUS15eEdDaFNEem8tUTlFXzcxQlRaWDVnOEpaRlBXVFZuTWxlT0xvZk0xX3AwQnpKM2JieHR0QS9leGVj";
 
         document.getElementById('connectBtn').onclick = function() {
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang khởi tạo...';
-            const target = atob(_0x_secret);
-            const frame = document.getElementById('appFrame');
-            const landing = document.getElementById('landing');
-
-            frame.src = target;
-            frame.style.display = "block";
-            landing.style.display = "none";
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tải...';
             
-            // Đổi URL giả trên thanh địa chỉ để chuyên nghiệp hơn
-            window.history.pushState({}, '', '/app');
+            try {
+                const target = atob(_0x_secret);
+                const frame = document.getElementById('appFrame');
+                const landing = document.getElementById('landing');
+
+                // Chèn link vào iframe và hiển thị
+                frame.src = target;
+                frame.style.display = "block";
+                
+                // Sau khi iframe load, ẩn landing page đi
+                frame.onload = function() {
+                    landing.style.display = "none";
+                };
+
+                // Lệnh quan trọng để giữ URL GitHub trên thanh trạng thái
+                window.history.pushState({page: "app"}, "Cloud Chat Drive", "?app=active");
+
+            } catch (e) {
+                alert("Lỗi kết nối máy chủ.");
+                this.innerHTML = 'Kết nối tài khoản Google';
+            }
+        };
+
+        // Chống thoát khỏi Iframe khi nhấn nút Back
+        window.onpopstate = function() {
+            location.reload();
         };
     </script>
 </body>
