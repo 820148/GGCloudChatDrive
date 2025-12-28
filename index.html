@@ -4,11 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cloud Chat Drive</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNsb3VkIENoYXQiLAogICJzaG9ydF9uYW1lIjogIkNoYXREcml2ZSIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjNmNGY2Igp9">
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -42,23 +37,16 @@
     </div>
 
     <script>
-        // DÁN TRỰC TIẾP LINK GAS CỦA BẠN VÀO ĐÂY (KHÔNG CẦN MÃ HÓA)
-        const gasUrl = "https://script.google.com/macros/s/AKfycbx m9zeua1eUm6h8I6F0qhZaIKqgBjf0L4lkEIMd9hVbrTERooIj7LLPjB6FCVrzlWd14g/exec";
+        // ĐÃ SỬA: Xóa khoảng trắng trong URL của bạn để link hoạt động chính xác
+        const gasUrl = "https://script.google.com/macros/s/AKfycbxm9zeua1eUm6h8I6F0qhZaIKqgBjf0L4lkEIMd9hVbrTERooIj7LLPjB6FCVrzlWd14g/exec";
 
         document.getElementById('connectBtn').onclick = function() {
-            // Hiệu ứng chờ khi chuyển hướng
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang kết nối...';
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang chuyển hướng...';
             this.disabled = true;
 
-            try {
-                // Chuyển hướng toàn bộ trang sang link GAS
-                // Sử dụng replace để không lưu trang GitHub này trong lịch sử Back của trình duyệt
-                window.location.replace(gasUrl);
-            } catch (e) {
-                alert("Lỗi kết nối máy chủ.");
-                this.innerHTML = 'Kết nối tài khoản Google';
-                this.disabled = false;
-            }
+            // Sử dụng window.location.href để chuyển hướng công khai và giữ lịch sử duyệt web
+            // Người dùng sẽ thấy link GAS hiện ngay trên thanh địa chỉ
+            window.location.href = gasUrl;
         };
     </script>
 </body>
