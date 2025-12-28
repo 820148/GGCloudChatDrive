@@ -2,66 +2,50 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cloud Chat Drive</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIkNsb3VkIENoYXQiLAogICJzaG9ydF9uYW1lIjogIkNoYXREcml2ZSIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjNmNGY2Igp9">
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #fff; font-family: sans-serif; }
-        #landing { 
-            height: 100vh; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            text-align: center; background: white; padding: 24px;
-        }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
+        iframe { border: none; width: 100%; height: 100%; display: none; }
     </style>
 </head>
 <body>
-
-    <div id="landing">
+    <div id="landing" class="flex flex-col items-center justify-center h-screen text-center p-6">
         <div class="mb-6 bg-blue-50 p-8 rounded-full shadow-inner">
             <i class="fas fa-cloud-meatball text-blue-500 text-6xl"></i>
         </div>
         <h1 class="text-3xl font-bold text-gray-800 mb-2 italic">Cloud Chat Drive</h1>
-        <p class="text-gray-500 mb-10 max-w-xs leading-relaxed">Kết nối và lưu trữ dữ liệu cá nhân an toàn trên không gian Drive của bạn.</p>
+        <p class="text-gray-500 mb-10 max-w-xs leading-relaxed">Kết nối và lưu trữ dữ liệu cá nhân an toàn.</p>
         
-        <button id="connectBtn" class="flex items-center gap-4 bg-white border-2 border-gray-100 px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition-all font-bold text-gray-700 mb-10">
-            <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-7 h-7"> Kết nối tài khoản Google
+        <button id="connectBtn" class="flex items-center gap-4 bg-white border-2 border-gray-100 px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition-all font-bold text-gray-700">
+            <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-7 h-7"> 
+            Kết nối tài khoản Google
         </button>
-
-        <div class="border-t pt-6 w-full max-w-xs">
-            <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 text-sm">
-                <p class="font-bold text-gray-700">Tác giả: Trần Gia Nhật Hoàng</p>
-                <a href="tel:0964889066" class="text-blue-600 font-medium italic">SĐT: 0964 889 066</a>
-            </div>
-        </div>
     </div>
 
+    <iframe id="appFrame" allow="geolocation; microphone; camera; clipboard-write;"></iframe>
+
     <script>
-        // Link GAS đã mã hóa Base64 của bạn
-        const _0x_secret = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5Z2RtTEtWcEpWZTRzYkxrRFdJMUpNOXV5a1MtTGRiTnhFVnFGNEdrdFRvdmdaOURLM2IwMmhoM2E5c1dGY3FWR0dGZy9leGVj";
+        const _0x_gas = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5Z2RtTEtWcEpWZTRzYkxrRFdJMUpNOXV5a1MtTGRiTnhFVnFGNEdrdFRvdmdaOURLM2IwMmhoM2E5c1dGY3FWR0dGZy9leGVj";
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // KIỂM TRA: Nếu có tham số ?session=active thì hiện App luôn (đã đăng nhập)
+        if (urlParams.get('session') === 'active') {
+            showApp();
+        }
+
+        function showApp() {
+            const frame = document.getElementById('appFrame');
+            frame.src = atob(_0x_gas);
+            frame.style.display = "block";
+            document.getElementById('landing').style.display = "none";
+        }
 
         document.getElementById('connectBtn').onclick = function() {
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang kết nối...';
-            this.disabled = true;
-            
-            try {
-                // Giải mã link GAS
-                const target = atob(_0x_secret);
-                
-                // Chuyển hướng trực tiếp toàn bộ trang
-                // Sử dụng .replace để người dùng không bấm 'Back' quay lại trang GitHub này được
-                window.location.replace(target);
-
-            } catch (e) {
-                alert("Lỗi cấu hình link xác thực.");
-                this.innerHTML = 'Kết nối tài khoản Google';
-                this.disabled = false;
-            }
+            // Chuyển hướng sang GAS để đăng nhập
+            window.location.href = atob(_0x_gas);
         };
     </script>
 </body>
