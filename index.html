@@ -2,50 +2,40 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cloud Chat Drive</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
-        iframe { border: none; width: 100%; height: 100%; display: none; }
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+        iframe { border: none; width: 100vw; height: 100vh; display: none; }
+        #landing { 
+            height: 100%; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; font-family: sans-serif; 
+        }
+        /* Giữ nguyên CSS Landing Page của bạn ở đây */
     </style>
 </head>
 <body>
-    <div id="landing" class="flex flex-col items-center justify-center h-screen text-center p-6">
-        <div class="mb-6 bg-blue-50 p-8 rounded-full shadow-inner">
-            <i class="fas fa-cloud-meatball text-blue-500 text-6xl"></i>
+    <div id="landing">
+        <button id="connectBtn">Kết nối tài khoản Google</button>
         </div>
-        <h1 class="text-3xl font-bold text-gray-800 mb-2 italic">Cloud Chat Drive</h1>
-        <p class="text-gray-500 mb-10 max-w-xs leading-relaxed">Kết nối và lưu trữ dữ liệu cá nhân an toàn.</p>
-        
-        <button id="connectBtn" class="flex items-center gap-4 bg-white border-2 border-gray-100 px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition-all font-bold text-gray-700">
-            <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-7 h-7"> 
-            Kết nối tài khoản Google
-        </button>
-    </div>
 
-    <iframe id="appFrame" allow="geolocation; microphone; camera; clipboard-write;"></iframe>
+    <iframe id="appFrame" src=""></iframe>
 
     <script>
-        const _0x_gas = "https://script.google.com/macros/s/AKfycbwjNHZ9TTWvAGEsx68TAgmymPmwqWTLtDFWbWL1aDBwE7SQaeSvYTet_dDmVNqMuWDCpg/exec";
-        const urlParams = new URLSearchParams(window.location.search);
-
-        // KIỂM TRA: Nếu có tham số ?session=active thì hiện App luôn (đã đăng nhập)
-        if (urlParams.get('session') === 'active') {
-            showApp();
-        }
-
-        function showApp() {
-            const frame = document.getElementById('appFrame');
-            frame.src = atob(_0x_gas);
-            frame.style.display = "block";
-            document.getElementById('landing').style.display = "none";
-        }
+        // Link GAS đã mã hóa Base64
+        const _0x_secret = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J6YnJKbENqdktWYUNxUS15eEdDaFNEem8tUTlFXzcxQlRaWDVnOEpaRlBXVFZuTWxlT0xvZk0xX3AwQnpKM2JieHR0QS9leGVj";
 
         document.getElementById('connectBtn').onclick = function() {
-            // Chuyển hướng sang GAS để đăng nhập
-            window.location.href = atob(_0x_gas);
+            const target = atob(_0x_secret);
+            const frame = document.getElementById('appFrame');
+            const landing = document.getElementById('landing');
+
+            frame.src = target;
+            frame.style.display = "block";
+            landing.style.display = "none";
+            
+            // Đẩy vào lịch sử trình duyệt để tránh bị thoát khi nhấn back
+            window.history.pushState({}, '', '/app');
         };
     </script>
 </body>
