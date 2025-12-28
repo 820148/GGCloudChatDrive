@@ -12,14 +12,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #fff; }
-        /* Iframe bao phủ toàn bộ màn hình */
-        #appFrame { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            border: none; display: none; z-index: 50; 
-        }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; background: #fff; font-family: sans-serif; }
         #landing { 
-            position: relative; z-index: 100; height: 100%; 
+            height: 100vh; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             text-align: center; background: white; padding: 24px;
         }
@@ -46,41 +41,27 @@
         </div>
     </div>
 
-    <iframe id="appFrame" name="appFrame" allow="geolocation; microphone; camera; midi; encrypted-media; clipboard-write;" sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-scripts allow-same-origin"></iframe>
-
     <script>
-        // DÁN LINK GAS ĐÃ MÃ HÓA BASE64 VÀO ĐÂY
+        // Link GAS đã mã hóa Base64 của bạn
         const _0x_secret = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5Z2RtTEtWcEpWZTRzYkxrRFdJMUpNOXV5a1MtTGRiTnhFVnFGNEdrdFRvdmdaOURLM2IwMmhoM2E5c1dGY3FWR0dGZy9leGVj";
 
         document.getElementById('connectBtn').onclick = function() {
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang tải...';
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang kết nối...';
+            this.disabled = true;
             
             try {
+                // Giải mã link GAS
                 const target = atob(_0x_secret);
-                const frame = document.getElementById('appFrame');
-                const landing = document.getElementById('landing');
-
-                // Chèn link vào iframe và hiển thị
-                frame.src = target;
-                frame.style.display = "block";
                 
-                // Sau khi iframe load, ẩn landing page đi
-                frame.onload = function() {
-                    landing.style.display = "none";
-                };
-
-                // Lệnh quan trọng để giữ URL GitHub trên thanh trạng thái
-                window.history.pushState({page: "app"}, "Cloud Chat Drive", "?app=active");
+                // Chuyển hướng trực tiếp toàn bộ trang
+                // Sử dụng .replace để người dùng không bấm 'Back' quay lại trang GitHub này được
+                window.location.replace(target);
 
             } catch (e) {
-                alert("Lỗi kết nối máy chủ.");
+                alert("Lỗi cấu hình link xác thực.");
                 this.innerHTML = 'Kết nối tài khoản Google';
+                this.disabled = false;
             }
-        };
-
-        // Chống thoát khỏi Iframe khi nhấn nút Back
-        window.onpopstate = function() {
-            location.reload();
         };
     </script>
 </body>
