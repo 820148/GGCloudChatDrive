@@ -7,12 +7,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #fff; }
+        body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background: #fff; font-family: sans-serif; }
         #landing { 
-            position: relative; z-index: 100; height: 100%; 
+            position: relative; z-index: 10; height: 100%; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             text-align: center; background: white; padding: 24px;
         }
+        /* Style cho Modal hướng dẫn */
+        #guideModal {
+            display: none; position: fixed; inset: 0; background: white; z-index: 200;
+            overflow-y: auto; padding-bottom: 40px;
+        }
+        .step-card { border-left: 4px solid #3b82f6; background: #f8fafc; margin-bottom: 16px; padding: 12px; border-radius: 0 8px 8px 0; text-align: left; }
     </style>
 </head>
 <body>
@@ -22,13 +28,19 @@
             <i class="fas fa-cloud-meatball text-blue-500 text-6xl"></i>
         </div>
         <h1 class="text-3xl font-bold text-gray-800 mb-2 italic">Cloud Chat Drive</h1>
-        <p class="text-gray-500 mb-10 max-w-xs leading-relaxed">Kết nối và lưu trữ dữ liệu cá nhân an toàn trên không gian Drive của bạn.</p>
+        <p class="text-gray-500 mb-8 max-w-xs leading-relaxed">Kết nối và lưu trữ dữ liệu cá nhân an toàn trên không gian Drive của bạn.</p>
         
-        <button id="connectBtn" class="flex items-center gap-4 bg-white border-2 border-gray-100 px-8 py-4 rounded-2xl shadow-xl hover:scale-105 transition-all font-bold text-gray-700 mb-10">
-            <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-7 h-7"> Kết nối tài khoản Google
-        </button>
+        <div class="flex flex-col gap-4 w-full max-w-xs">
+            <button id="connectBtn" class="flex items-center justify-center gap-4 bg-blue-600 px-6 py-4 rounded-2xl shadow-lg hover:bg-blue-700 transition-all font-bold text-white">
+                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" class="w-6 h-6 bg-white rounded-full"> Kết nối ngay
+            </button>
 
-        <div class="border-t pt-6 w-full max-w-xs">
+            <button id="openGuideBtn" class="flex items-center justify-center gap-2 bg-white border-2 border-gray-100 px-6 py-4 rounded-2xl shadow-sm hover:bg-gray-50 transition-all font-bold text-gray-600">
+                <i class="fas fa-book-reader text-orange-500"></i> Xem hướng dẫn cấp quyền
+            </button>
+        </div>
+
+        <div class="border-t mt-10 pt-6 w-full max-w-xs">
             <div class="bg-gray-50 rounded-xl p-4 border border-gray-100 text-sm">
                 <p class="font-bold text-gray-700">Tác giả: Trần Gia Nhật Hoàng</p>
                 <a href="tel:0964889066" class="text-blue-600 font-medium italic">SĐT: 0964 889 066</a>
@@ -36,17 +48,72 @@
         </div>
     </div>
 
+    <div id="guideModal" class="animate-in slide-in-from-bottom duration-300">
+        <div class="sticky top-0 bg-white/90 backdrop-blur-sm p-4 border-b flex justify-between items-center z-10">
+            <h2 class="text-xl font-bold text-gray-800">Hướng dẫn cấp quyền</h2>
+            <button id="closeGuideBtn" class="text-gray-400 hover:text-red-500 text-2xl p-2">&times;</button>
+        </div>
+
+        <div class="p-5 max-w-2xl mx-auto">
+            <div class="mb-8 rounded-2xl overflow-hidden shadow-xl aspect-video">
+                <iframe class="w-full h-full" src="https://www.youtube.com/embed/s1B0xFdiX3M" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            </div>
+
+            <h3 class="font-bold text-blue-600 mb-4 flex items-center gap-2">
+                <i class="fas fa-list-ol"></i> CÁC BƯỚC THỰC HIỆN CHI TIẾT
+            </h3>
+
+            <div class="step-card">
+                <p class="font-bold text-gray-800 mb-1">Bước 1: Chọn tài khoản Google</p>
+                <p class="text-gray-600 text-sm">Đăng nhập bằng tài khoản mà bạn muốn dùng để lưu trữ dữ liệu Drive.</p>
+            </div>
+
+            <div class="step-card">
+                <p class="font-bold text-gray-800 mb-1">Bước 2: Xác nhận "Ứng dụng chưa được xác minh"</p>
+                <p class="text-gray-600 text-sm mb-2">Đừng lo lắng, đây là cảnh báo mặc định vì ứng dụng là nội bộ cá nhân. Nhấn vào <b>"Nâng cao" (Advanced)</b>.</p>
+                <img src="https://support.google.com/cloud/answer/7454865/advanced_button.png" class="w-full rounded-lg border">
+            </div>
+
+            <div class="step-card">
+                <p class="font-bold text-gray-800 mb-1">Bước 3: Đi tới ứng dụng</p>
+                <p class="text-gray-600 text-sm">Nhấn vào dòng chữ <b>"Đi tới Cloud Chat Drive (không an toàn)"</b> ở phía dưới cùng.</p>
+            </div>
+
+            <div class="step-card">
+                <p class="font-bold text-gray-800 mb-1">Bước 4: Nhấn "Cho phép" (Allow)</p>
+                <p class="text-gray-600 text-sm">Nhấn nút "Cho phép" để ứng dụng có thể tạo file và lưu tin nhắn trên Drive của bạn.</p>
+                <img src="https://www.gstatic.com/identity/boq/accountsettings/permissions_allow_button.png" class="h-10 mx-auto mt-2">
+            </div>
+
+            <button id="guideGotItBtn" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold mt-6 shadow-lg">
+                Đã hiểu, quay lại Kết nối
+            </button>
+        </div>
+    </div>
+
     <script>
-        // ĐÃ SỬA: Xóa khoảng trắng trong URL của bạn để link hoạt động chính xác
         const gasUrl = "https://script.google.com/macros/s/AKfycby1qKASEj5YfOtJbl5kOaRe8YWGn1LoMObiKuaEJmvHnWCnAaXey_Hl8EoWnmHV4qBULg/exec";
 
+        // Xử lý chuyển hướng GAS
         document.getElementById('connectBtn').onclick = function() {
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang chuyển hướng...';
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang kết nối...';
             this.disabled = true;
-
-            // Sử dụng window.location.href để chuyển hướng công khai và giữ lịch sử duyệt web
-            // Người dùng sẽ thấy link GAS hiện ngay trên thanh địa chỉ
             window.location.href = gasUrl;
+        };
+
+        // Điều khiển Modal hướng dẫn
+        const guideModal = document.getElementById('guideModal');
+        const openBtn = document.getElementById('openGuideBtn');
+        const closeBtn = document.getElementById('closeGuideBtn');
+        const gotItBtn = document.getElementById('guideGotItBtn');
+
+        openBtn.onclick = () => { guideModal.style.display = 'block'; };
+        closeBtn.onclick = () => { guideModal.style.display = 'none'; };
+        gotItBtn.onclick = () => { guideModal.style.display = 'none'; };
+
+        // Đóng modal khi nhấn phím Esc
+        window.onkeydown = (e) => {
+            if (e.key === 'Escape') guideModal.style.display = 'none';
         };
     </script>
 </body>
